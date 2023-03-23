@@ -31,6 +31,9 @@
   },
   "scripts": {
     "pack": "electron-builder --dir",
+    "build-win": "electron-builder --win --x64",
+    "build-mac": "electron-builder --mac --x64",
+    "build-linux": "electron-builder --linux --x64",
     "dist": "electron-builder",
     "start": "electron ."
   }
