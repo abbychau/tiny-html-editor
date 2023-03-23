@@ -1,0 +1,37 @@
+{
+  "name": "tiny-electron",
+  "version": "1.0.0",
+  "description": "A basic electron wrapper for TinyMCE",
+  "main": "main.js",
+  "repository": "https://github.com/abbychau/tinymce-htmleditor",
+  "keywords": [
+    "Electron",
+    "TinyMCE"
+  ],
+  "author": "abbychau",
+  "license": "MIT",
+  "dependencies": {
+    "tinymce": "^5.0.14",
+    "js-beautify": "^1.10.2"
+  },
+  "devDependencies": {
+    "electron": "^6.0.3",
+    "electron-builder": "^21.2.0"
+  },
+  "productName": "Tiny HTML Editor",
+  "build": {
+    "appId": "Tiny HTML Editor",
+    "win": {
+      "icon": "buildAssets/play_store_512.png"
+    },
+    "mac": {
+      "icon": "buildAssets/play_store_512.png"
+    },
+    "asar": true
+  },
+  "scripts": {
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "start": "electron ."
+  }
+}
