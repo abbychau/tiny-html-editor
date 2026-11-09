@@ -53,47 +53,55 @@ ipcMain.on('call-quit', (event, arg) => app.quit());
 
 // TINY MCE-SCRIPT
 
-let filename;
+let current_file;      // full path of the file being edited, or null
 let working_directory;
 
-function load() {
-  dialog.showOpenDialog({ properties: ["openFile"], defaultPath: working_directory }, function (file) {
-    fs.readFile(file[0], 'utf8', (err, data) => {
-      if (err) throw err;
-      change_working_directory(file[0]);
-      mainWindow.webContents.send('new-file', data);
-    });
-  });
+function show_error(title, err) {
+  dialog.showErrorBox(title, String(err && err.message || err));
 }
 
-function save(output) {
-  if (filename == null) {
-    saveas(output);
-  } else {
-    var fullpath = path.join(working_directory, filename);
-    fs.writeFile(fullpath, beautify(output, { indent_size: 2 }), (err) => {
-      if (err) throw err;
-    });
+async function load() {
+  try {
+    const result = await dialog.showOpenDialog(mainWindow, { properties: ["openFile"], defaultPath: working_directory });
+    if (result.canceled || !result.filePaths || result.filePaths.length === 0) return;
+    const file = result.filePaths[0];
+    const data = await fs.promises.readFile(file, 'utf8');
+    set_current_file(file);
+    mainWindow.webContents.send('new-file', data);
+  } catch (err) {
+    show_error('Could not open file', err);
   }
 }
 
-function saveas(output) {
-  var options = {
+async function save(output) {
+  if (!current_file) return saveas(output);
+  try {
+    await fs.promises.writeFile(current_file, beautify(output, { indent_size: 2 }));
+  } catch (err) {
+    show_error('Could not save file', err);
+  }
+}
+
+async function saveas(output) {
+  const options = {
     filters: [
       { name: 'html', extensions: ['htm', 'html'] },
       { name: 'All Files', extensions: ['*'] }
     ],
-    defaultPath: working_directory
+    defaultPath: current_file || working_directory
   };
-  dialog.showSaveDialog(options, function (file) {
-    if (!file) return;
-    change_working_directory(path.dirname(file));
-    filename = path.basename(file);
-    save(output);
-  });
+  try {
+    const result = await dialog.showSaveDialog(mainWindow, options);
+    if (result.canceled || !result.filePath) return;
+    set_current_file(result.filePath);
+    await save(output);
+  } catch (err) {
+    show_error('Could not save file', err);
+  }
 }
 
-function change_working_directory(new_path) {
-  working_directory = path.dirname(new_path);
+function set_current_file(file) {
+  current_file = file;
+  working_directory = path.dirname(file);
   mainWindow.webContents.send('change-cwd', working_directory);
 }
