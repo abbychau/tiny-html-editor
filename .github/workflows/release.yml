@@ -30,11 +30,14 @@ jobs:
             target: --win nsis --x64
           - os: macos-latest
             target: --mac zip --x64
+            # Runners are Apple Silicon; Electron 6 only ships x64 for macOS.
+            npm_arch: x64
           - os: ubuntu-latest
             target: --linux AppImage deb --x64
     runs-on: ${{ matrix.os }}
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'   # no code signing
+      npm_config_arch: ${{ matrix.npm_arch }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
