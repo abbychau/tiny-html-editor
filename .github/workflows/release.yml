@@ -5,6 +5,12 @@ name: Release
 on:
   push:
     tags: ['v*']
+  # Build (without publishing) when packaging changes, to catch breakage early.
+  pull_request:
+    paths:
+      - package.json
+      - package-lock.json
+      - .github/workflows/release.yml
   workflow_dispatch:
     inputs:
       version:
@@ -40,7 +46,8 @@ jobs:
         shell: bash
         run: |
           VERSION="${{ inputs.version }}"
-          [ -z "$VERSION" ] && VERSION="${GITHUB_REF_NAME#v}"
+          if [ -z "$VERSION" ] && [[ "$GITHUB_REF" == refs/tags/v* ]]; then VERSION="${GITHUB_REF_NAME#v}"; fi
+          [ -z "$VERSION" ] && VERSION="$(node -p "require('./package.json').version")"
           npm version --no-git-tag-version --allow-same-version "$VERSION"
       - name: Build
         run: npx electron-builder ${{ matrix.target }} --publish never
