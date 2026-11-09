@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiny HTML Editor</title>
+<meta name="description" content="A small desktop WYSIWYG HTML editor for Windows, macOS and Linux, built on TinyMCE and Electron.">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+  :root {
+    --bg: #f4f1ea; --fg: #222; --muted: #6b6558; --panel: #fffdf8; --border: #d8d1c2;
+    --accent: #7a3b00; --accent-fg: #fff; --code: #ece6d8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #17181a; --fg: #e8e6e1; --muted: #9a958a; --panel: #212226; --border: #34363b;
+            --accent: #e09a52; --accent-fg: #17181a; --code: #2b2c31; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 880px; margin: 0 auto; padding: 40px 16px 32px; }
+  a { color: var(--accent); }
+  header { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+  header img { width: 44px; height: 44px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0; }
+  h2 { font-size: 20px; margin: 48px 0 12px; }
+  .lead { color: var(--muted); font-size: 18px; margin: 0 0 28px; max-width: 640px; }
+  code, pre { font: 0.9em ui-monospace, Consolas, monospace; background: var(--code); }
+  code { padding: 1px 5px; }
+  pre { padding: 12px 14px; overflow-x: auto; border: 1px solid var(--border); margin: 0 0 12px; }
+
+  .downloads { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn { display: inline-block; padding: 10px 16px; border: 1px solid var(--border);
+         background: var(--panel); color: var(--fg); text-decoration: none; font-weight: 600; }
+  .btn small { font-weight: 400; color: var(--muted); margin-left: 6px; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+  .btn.primary small { color: inherit; opacity: .8; }
+  .btn:hover { border-color: var(--accent); }
+  .meta { color: var(--muted); font-size: 14px; margin-top: 10px; }
+
+  figure { margin: 36px 0 0; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--border); }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+              gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .features div { background: var(--panel); padding: 14px 16px; }
+  .features b { display: block; margin-bottom: 2px; }
+  .features span { color: var(--muted); font-size: 15px; }
+
+  .note { background: var(--panel); border: 1px solid var(--border); padding: 12px 16px;
+          font-size: 15px; color: var(--muted); }
+
+  footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--border);
+           color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <img src="icon.png" alt="">
+    <h1>Tiny HTML Editor</h1>
+  </header>
+  <p class="lead">A small desktop editor for HTML files. Open a page, edit it like a word processor, and save clean, indented HTML. Built on TinyMCE and Electron, free and open source.</p>
+
+  <div class="downloads" id="downloads">
+    <a class="btn" data-os="win" href="https://github.com/abbychau/tiny-html-editor/releases/latest">Windows<small>installer</small></a>
+    <a class="btn" data-os="mac" href="https://github.com/abbychau/tiny-html-editor/releases/latest">macOS<small>.zip</small></a>
+    <a class="btn" data-os="appimage" href="https://github.com/abbychau/tiny-html-editor/releases/latest">Linux<small>AppImage</small></a>
+    <a class="btn" data-os="deb" href="https://github.com/abbychau/tiny-html-editor/releases/latest">Debian / Ubuntu<small>.deb</small></a>
+  </div>
+  <p class="meta" id="release-meta"><a href="https://github.com/abbychau/tiny-html-editor/releases">All releases</a></p>
+
+  <figure>
+    <img src="screenshot.png" width="886" height="673"
+         alt="Tiny HTML Editor window with a menu bar, formatting toolbar and a document being edited">
+  </figure>
+
+  <h2>What it does</h2>
+  <div class="features">
+    <div><b>Rich text editing</b><span>Fonts, headings, lists, alignment, colours, tables, links, images and media.</span></div>
+    <div><b>Real files</b><span>Open, Save and Save As work on HTML files on your disk, with relative image paths kept intact.</span></div>
+    <div><b>Clean output</b><span>Saved HTML is beautified with two-space indentation, so it stays readable in a code editor.</span></div>
+    <div><b>Source view</b><span>Switch to the HTML source at any time, or preview the page full screen.</span></div>
+    <div><b>Quick toolbar</b><span>Select text to get bold, italic, link, heading and quote buttons right where you are.</span></div>
+    <div><b>Cross-platform</b><span>Builds for Windows, macOS and Linux (AppImage and .deb) with every release.</span></div>
+  </div>
+
+  <h2>Installing</h2>
+  <p><b>Windows:</b> run the installer. <b>macOS:</b> unzip and drag the app to Applications. The app is not signed, so the first time, right-click it and choose <i>Open</i>. <b>Linux:</b> make the AppImage executable and run it, or install the .deb:</p>
+  <pre>sudo apt install ./Tiny-HTML-Editor-*-linux-amd64.deb</pre>
+
+  <h2>Building from source</h2>
+  <pre>git clone https://github.com/abbychau/tiny-html-editor
+cd tiny-html-editor
+npm install
+npm start</pre>
+  <p class="note">Found a bug or want a feature? <a href="https://github.com/abbychau/tiny-html-editor/issues">Open an issue</a> on GitHub.</p>
+
+  <footer>
+    <span>MIT licence</span>
+    <a href="https://github.com/abbychau/tiny-html-editor">Source on GitHub</a>
+    <a href="https://www.tiny.cloud/">TinyMCE</a>
+    <a href="https://www.electronjs.org/">Electron</a>
+  </footer>
+</main>
+<script>
+// Point the download buttons at the files in the latest release, and
+// highlight the one for this visitor's system. Without this script the
+// buttons still lead to the latest release page.
+(function () {
+  var ua = navigator.userAgent;
+  var mine = /Windows/.test(ua) ? 'win'
+           : /Mac OS X|Macintosh/.test(ua) && !/iPhone|iPad/.test(ua) ? 'mac'
+           : /Ubuntu|Debian/.test(ua) ? 'deb'
+           : /Linux/.test(ua) && !/Android/.test(ua) ? 'appimage' : null;
+  var buttons = document.querySelectorAll('#downloads .btn');
+  buttons.forEach(function (b) { if (b.dataset.os === mine) b.classList.add('primary'); });
+
+  var match = { win: /\.exe$/, mac: /mac.*\.zip$/, appimage: /\.AppImage$/, deb: /\.deb$/ };
+  fetch('https://api.github.com/repos/abbychau/tiny-html-editor/releases/latest')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+    .then(function (rel) {
+      buttons.forEach(function (b) {
+        var a = rel.assets.find(function (x) { return match[b.dataset.os].test(x.name); });
+        if (a) {
+          b.href = a.browser_download_url;
+          b.title = a.name + ' (' + Math.round(a.size / 1048576) + ' MB)';
+        }
+      });
+      var date = new Date(rel.published_at).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+      var meta = document.getElementById('release-meta');
+      meta.textContent = 'Version ' + rel.tag_name.replace(/^v/, '') + ', released ' + date + ' · ';
+      [['Release notes', rel.html_url], ['All releases', 'https://github.com/abbychau/tiny-html-editor/releases']]
+        .forEach(function (l, i) {
+          if (i) meta.appendChild(document.createTextNode(' · '));
+          var a = document.createElement('a'); a.href = l[1]; a.textContent = l[0]; meta.appendChild(a);
+        });
+    })
+    .catch(function () { /* keep the fallback links */ });
+})();
+</script>
+</body>
+</html>

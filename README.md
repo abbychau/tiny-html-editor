@@ -2,6 +2,8 @@
 
 A lightweight HTML editor built with Electron and TinyMCE that provides a rich text editing experience with a clean interface.
 
+**Website and downloads: https://abbychau.github.io/tiny-html-editor/**
+
 ![screenshot](screenshot.png)
 
 ## Features
@@ -18,7 +20,7 @@ A lightweight HTML editor built with Electron and TinyMCE that provides a rich t
 
 ```sh
 # Clone the repository
-git clone https://github.com/abbychau/tinymce-htmleditor
+git clone https://github.com/abbychau/tiny-html-editor
 
 # Install dependencies
 npm install
